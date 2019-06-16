@@ -7,5 +7,5 @@ int main() {
     getline(cin, input);
     if(input.length() != 1)
         cout << "length error" << endl;
-    cout << input << endl;
+    cout << "hahfhah" + to_string(2) << endl;
 }

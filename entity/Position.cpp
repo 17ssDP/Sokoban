@@ -16,6 +16,9 @@ public:
     bool operator<(const Position& other) const {
         return (100 * x + y) < (100 * other.x + other.y);
     }
+    bool operator==(const Position& other) const {
+        return (x == other.x && y == other.y);
+    }
     int getX() const {
         return x;
     } 

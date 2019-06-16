@@ -8,38 +8,12 @@
 class ConsoleGameUtil
 {
 public:
-    static char getSympol(Element ele) {
-        switch (ele.getSymbol())
-        {
-        case OutOpen:
-            return ' ';
-        case Mur:
-            return 'W';
-        case InOpen:
-            return ' ';
-        case Trunk:
-            return 'B';
-        case Target:
-            return 'O';
-        case Persion:
-            return 'P';
-        case BoxOnTarget:
-            return 'B';
-        default:
-            return ' ';
-        }
-    }
 
     static void display(Map eleMap) {
-        for(int i = 0; i < eleMap.getRow(); i++) {
-            for(int j = 0; j < eleMap.getCol(); j++) {
-                std::cout << getSympol(eleMap.getElements().find(Position(i, j))->second);
-            }
-            std::cout << std::endl;
-        }
+        eleMap.print();
     }
 
-    static void resolveInput() {
+    static void resolveInput(Game* game, Player* player) {
         std::string input;
         getline(std::cin, input);
         if(input.length() != 1) {
@@ -50,7 +24,7 @@ public:
         switch (order)
         {
         case 'W':case 'A': case 'S': case 'D': 
-            resolveMove(order);
+            resolveMove(game, player, order);
             break;
         case 'Q':
             exit(0);
@@ -58,7 +32,7 @@ public:
             resolveHelp();
             break;
         case '1':case '2':case '3':case '4':case '5':case '6':case '7':case '8':case '9':
-            resolveBarrierChoose(order);
+            resolveBarrierChoose(game, input);
             break;
         default:
             resolveInvalidInput();
@@ -66,15 +40,27 @@ public:
         }
     }
 
-    static void resolveMove(const char move) {
+    static void resolveMove(Game* game, Player* player, const char move) {
+        Position pos;
         switch (move)
         {
-        case 'w':
-            
+        case 'W':
+            pos = Position(-1, 0);
             break;
-        
+        case 'A':
+            pos = Position(0, -1);
+            break;
+        case 'S':
+            pos = Position(1, 0);
+            break;
+        case 'D':
+            pos = Position(0, 1);
+            break;
         default:
-            break;
+            pos = Position(0, 0);
+        }
+        if(player->validMove(*game->getCurrentSession()->getMap(), pos)) {
+            player->move(game->getCurrentSession()->getMap(), pos);
         }
     }
 
@@ -82,8 +68,9 @@ public:
         std::cout << "Help" << std::endl;
     }
 
-    static void resolveBarrierChoose(int num) {
-        
+    static void resolveBarrierChoose(Game* game, std::string num) {
+        game->finishSession();
+        game->startSession(num);
     }
 
     static void resolveInvalidInput() {

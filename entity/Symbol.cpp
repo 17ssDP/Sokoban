@@ -9,6 +9,7 @@ Trunk,
 Target,
 Persion,
 BoxOnTarget,
+PersionOnTarget,
 };
 
 #endif //SYMBOL

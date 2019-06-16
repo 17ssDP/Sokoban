@@ -3,34 +3,33 @@
 #include"../util/FileUtil.cpp"
 #include"Position.cpp"
 #include"Symbol.cpp"
-#include"Element.cpp"
-#include"Wall.cpp"
-#include"Player.cpp"
-#include"Box.cpp"
-#include"Object.cpp"
 #include<assert.h>
 class Map
 {
 private:
     int row;
     int col;
-    std::map<Position, Element> elements;
-    Element* intToElement(int x, int y, int num) {
+    std::map<Position, Symbol> elements;
+    Symbol intToElement(int num) {
         assert(num >= 0 && num <= 9);
         switch (num)
         {
-            case 0: case 2:
-                return new Element(OutOpen, Position(x, y));
+            case 0: 
+                return OutOpen;
             case 1:
-                return new Wall(Position(x, y));
+                return Mur;
+            case 2:
+                return InOpen;
             case 3:
-                return new Box(Position(x, y));
+                return Trunk;
             case 4:
-                return new Object(Position(x, y));
+                return Target;
             case 5: case 6: case 7: case 8:
-                return new Player(Position(x, y));
+                return Persion;
+            case 9:
+                return BoxOnTarget;
             default:
-                return new Element(OutOpen, Position(x, y));
+                return InOpen;
         }
     }
 public:
@@ -44,12 +43,16 @@ public:
         col = size[1];
         for(int i = 0; i < row; i++) {
             for(int j = 0; j < col; j++) {
-                elements.insert(std::pair<Position, Element>(Position(i, j), *intToElement(i, j, intMap[i][j])));
+                elements.insert(std::pair<Position, Symbol>(Position(i, j), intToElement(intMap[i][j])));
             }
         }
     }
 
-    const std::map<Position, Element> getElements() const {
+    Map(std::map<Position, Symbol> ele) {
+        elements = ele;
+    }
+
+    std::map<Position, Symbol>& getElements(){
         return elements;
     }
     int getRow() {
@@ -58,21 +61,38 @@ public:
     int getCol() {
         return col;
     }
-    // void print() {
-    //     // std::cout << elements.size() << std::endl;
-    //     std::map<Position, Element>::iterator iter;
-    //     for(iter = elements.begin(); iter != elements.end(); iter++) {
-    //         Element symbol = iter->second;
-    //         switch (symbol)
-    //         {
-    //         case Mur:
-    //             std::cout << "wall" << std::endl;
-    //             break;
-    //         default:
-    //             std::cout << "NotWall" << std::endl;
-    //         }
-    //     }
-    // }
+    void print() {
+        // std::cout << elements.size() << std::endl;
+        for(int i = 0; i < row; i++) {
+            for(int j = 0; j < col; j++) {
+                std::cout << getSympol(elements.find(Position(i, j))->second);
+            }
+            std::cout << std::endl;
+        }
+    }
+    static char getSympol(Symbol ele) {
+        switch (ele)
+        {
+        case OutOpen:
+            return ' ';
+        case Mur:
+            return 'W';
+        case InOpen:
+            return ' ';
+        case Trunk:
+            return 'B';
+        case Target:
+            return 'O';
+        case Persion:
+            return 'P';
+        case BoxOnTarget:
+            return 'B';
+        case PersionOnTarget:
+            return 'P';
+        default:
+            return ' ';
+        }
+    }
     ~Map();
 };
 

@@ -2,6 +2,7 @@
 #define SESSION
 #include "Map.cpp"
 #include "../util/FileUtil.cpp"
+#include<map>
 class Session
 {
 private:
@@ -13,11 +14,18 @@ public:
     Session(std::string path) {
         map = Map(path);
     }
-    int finished() const {
-
+    int finished(){
+        std::map<Position, Symbol>::iterator iter;
+        for(iter = map.getElements().begin(); iter != map.getElements().end(); iter++) {
+            if(iter->second == Trunk) {
+                std::cout << iter->first.getX() << iter->first.getY() << std::endl;
+                return 0;
+            }
+        }
+        return 1;
     }
-    const Map getMap() const {
-        return map;
+    Map* getMap(){
+        return &map;
     }
     ~Session();
 };
