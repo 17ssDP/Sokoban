@@ -1,0 +1,11 @@
+CPP=g++
+BINDIR=./bin
+ENTITYDIR=./entity
+
+all:$(BINDIR)/Session.o
+
+$(BINDIR)/Session.o: $(ENTITYDIR)/Session.cpp
+    $(CPP) -c -o $@ $<
+
+clean:
+    rm -f $(BINDIR)/*

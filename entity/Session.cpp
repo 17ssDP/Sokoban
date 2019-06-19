@@ -1,37 +1,14 @@
-#ifndef SESSION
-#define SESSION
-#include "Map.cpp"
-#include "../util/FileUtil.cpp"
+#include"Session.h"
 #include<map>
-class Session
-{
-private:
-    Map map;
-public:
-    Session() {
-        
-    }
-    Session(std::string path) {
-        map = Map(path);
-    }
-    int finished(){
+
+int Session::finished(){
+        // std::cout << "Session::finished()"<< std::endl;
         std::map<Position, Symbol>::iterator iter;
         for(iter = map.getElements().begin(); iter != map.getElements().end(); iter++) {
             if(iter->second == Trunk) {
-                std::cout << iter->first.getX() << iter->first.getY() << std::endl;
+                // std::cout << iter->first.getX() << iter->first.getY() << std::endl;
                 return 0;
             }
         }
         return 1;
     }
-    Map* getMap(){
-        return &map;
-    }
-    ~Session();
-};
-
-Session::~Session()
-{
-}
-
-#endif //SESSION

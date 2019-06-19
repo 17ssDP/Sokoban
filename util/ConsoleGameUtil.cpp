@@ -1,7 +1,9 @@
 #ifndef CONSOLEGAME_UTIL
 #define CONSOLEGAME_UTIL
-#include"../entity/Symbol.cpp"
-#include"../entity/Map.cpp"
+#include"../entity/Symbol.h"
+#include"../entity/Map.h"
+#include"../entity/Game.h"
+#include"../entity/Player.h"
 #include<map>
 #include<iostream>
 #include<string>
@@ -65,17 +67,56 @@ public:
     }
 
     static void resolveHelp() {
-        std::cout << "Help" << std::endl;
+        std::cout << "♀ 代表小人儿，▓代表墙体，□代表箱子，○代表目标地点，当你把箱子推到目标地点之后，□就会变成■" << std::endl;
+        std::cout << "来呀来呀，来玩呀" <<std::endl;
+        std::cout << "H代表帮助，输入1-9选择关卡，输入Q退出游戏"<< std::endl;
     }
 
     static void resolveBarrierChoose(Game* game, std::string num) {
         game->finishSession();
-        game->startSession(num);
+        startOneSession(game, num);
     }
 
     static void resolveInvalidInput() {
         std::cout << "Invalid Input" << std::endl;
     }
 
+    static std::string chooseNewMap() {
+        std::string input;
+        getline(std::cin, input);
+        if(input.length() != 1) {
+            resolveInvalidInput();
+            return chooseNewMap();
+        }
+        char order = input.at(0);
+        if(order >= '1' && order <= '9') {
+            return input;
+        }
+        resolveInvalidInput();
+        return chooseNewMap();
+    }
+
+    static void playOneSession(Game* game){
+        Session* currentSession = game->getCurrentSession();
+        Player player(*currentSession->getMap());
+        while(!currentSession->finished()) {
+            display(*currentSession->getMap());
+            resolveInput(game, &player);
+        }
+        display(*currentSession->getMap());
+        finishOneSession(game);
+    }
+
+    static void finishOneSession(Game* game) {
+        std::cout << "Victory!!! Choose a new map: ";
+        game->finishSession();
+        std::string num = chooseNewMap();
+        startOneSession(game, num);
+    }
+
+    static void startOneSession(Game* game, std::string num = "1") {
+        game->startSession(num);
+        playOneSession(game);
+    }
 };
 #endif

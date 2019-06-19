@@ -1,7 +1,7 @@
 #ifndef BOX
 #define BOX
-#include"Symbol.cpp"
-#include"Position.cpp"
+#include"Symbol.h"
+#include"Position.h"
 #include"Map.cpp"
 class Box : public Element
 {
