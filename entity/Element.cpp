@@ -1,7 +1,7 @@
 #ifndef ELEMENT
 #define ELEMENT
-#include"Symbol.cpp"
-#include"Position.cpp"
+#include"Symbol.h"
+#include"Position.h"
 class Element
 {
 protected:

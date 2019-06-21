@@ -13,10 +13,9 @@ public:
         int col = atoi(input.c_str());
         in >> input;
         int row = atoi(input.c_str());
-        int **map;
-        map = (int**)malloc(row * sizeof(int*));
+        int **map = new int*[row];
         for(int i = 0; i < row; i++) {
-            map[i] = (int*)malloc(col * sizeof(int));
+            map[i] = new int[col];
         }
         row = 0;
         while(in >> input) {

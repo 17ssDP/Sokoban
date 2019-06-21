@@ -1,29 +1,23 @@
-#ifndef GAME
-#define GAME 
-#include<vector>
+#include"Game.h"
 #include<assert.h>
-#include"Session.cpp"
-class Game
-{
-private:
-    std::vector<Session> sessions;
-    Session *currentSession;
-public:
-    Game(/* args */) {
-        currentSession = NULL;
-    }
-
-    const Session& startSession(std::string path) {
+Session* Game::startSession(std::string head) {
         assert(currentSession == NULL);
+        mapHead = head;
+        std::string path = "./maps/" + mapHead + ".map";
         currentSession = new Session(path);
-        return *currentSession;
+        return currentSession;
     }
 
-    void finishSession() {
+Session* Game::nextSession() {
+        int mapNum;
+        sscanf(mapHead.c_str(), "%d", &mapNum);
+        mapNum++;
+        mapNum %= 9;
+        mapHead = std::to_string(mapNum);
+        return startSession(mapHead);
+    }
+
+void Game::finishSession() {
         delete currentSession;
         currentSession = NULL;
     }
-    ~Game();
-};
-
-#endif
