@@ -89,6 +89,12 @@ public:
             return chooseNewMap();
         }
         char order = input.at(0);
+        if(order == 'Q') {
+            exit(0);
+        }
+        if(order == 'H') {
+            resolveHelp();
+        }
         if(order >= '1' && order <= '9') {
             return input;
         }
